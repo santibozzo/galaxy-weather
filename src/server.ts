@@ -25,7 +25,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, connectionOptions)
     .then(() => {
         console.log('Connected to DB');
-        dataBaseInitializer.initializeDataBase()
-            .then(() => console.log('DB initialized'));
+        dataBaseInitializer.initializeDataBase();
     })
     .catch(error => console.error(error));
