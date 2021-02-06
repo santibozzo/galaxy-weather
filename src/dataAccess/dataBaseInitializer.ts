@@ -11,10 +11,10 @@ const SUN_POSITION = {x: 0, y: 0};
 const WEATHER_DRY = 'dry';
 const WEATHER_HUMID = 'humid';
 const WEATHER_RAINY = 'rainy';
-const WEATHER_PERFECT = 'perfect temperature and pression';
+const WEATHER_PERFECT = 'perfect';
 
 const initializeDataBase = () => {
-    connection.db.collection('weather').countDocuments()
+    connection.db.collection('weathers').countDocuments()
         .then(count => {
             if(count === 0) {
                 populateWeather().then(() => console.log('DB initialized'));
@@ -133,7 +133,7 @@ const populateWeather = async () => {
             weather = WEATHER_HUMID;
         }
         toSave.push(new WeatherModel({
-            day: day.toISOString(),
+            date: day.format('DDMMYYYY'),
             weather,
             rainIntensity,
             ferengiPosition: [ferengi.x, ferengi.y],

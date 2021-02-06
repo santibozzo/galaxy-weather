@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IWeatherModel extends Document {
-    day: string,
+    date: string,
     weather: string,
     rainIntensity: number,
     ferengiPosition: number[],
@@ -13,7 +13,7 @@ export interface IWeatherModel extends Document {
 }
 
 const WeatherSchema: Schema = new Schema({
-    day: {type: String, required: true, unique: true},
+    date: {type: String, required: true, unique: true},
     weather: {type: String, required: true},
     rainIntensity: {type: Number, required: true},
     ferengiPosition: {type: [Number], required: true},
