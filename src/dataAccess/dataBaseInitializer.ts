@@ -1,17 +1,12 @@
 import mongoose from 'mongoose';
 import moment from 'moment';
-
 import WeatherModel, {IWeatherModel} from '../models/weatherModel';
+import {
+    SUN_POSITION,
+    WEATHER_DRY, WEATHER_HUMID, WEATHER_RAINY, WEATHER_PERFECT
+} from '../utils/constants';
 
 const connection = mongoose.connection;
-const FERENGI_DISTANCE = 500;
-const BETASOIDE_DISTANCE = 2000;
-const VULCANO_DISTANCE = 1000;
-const SUN_POSITION = {x: 0, y: 0};
-const WEATHER_DRY = 'dry';
-const WEATHER_HUMID = 'humid';
-const WEATHER_RAINY = 'rainy';
-const WEATHER_PERFECT = 'perfect';
 
 const initializeDataBase = () => {
     connection.db.collection('weathers').countDocuments()
@@ -108,18 +103,18 @@ const getDistance = (p1: Point, p2: Point): number => {
 
 const populateWeather = async () => {
     let day = moment();
-    const tenYears = moment().add(10, 'years');
-    let ferengi: Planet = {x: 0, y: FERENGI_DISTANCE, degree: 90};
-    let betasoide: Planet = {x: 0, y: BETASOIDE_DISTANCE, degree: 90};
-    let vulcano: Planet = {x: 0, y: VULCANO_DISTANCE, degree: 90};
+    const years = moment().add(parseInt(process.env.WEATHER_YEARS || '10', 10), 'years');
+    let ferengi: Planet = {x: 0, y: parseFloat(process.env.FERENGI_DISTANCE || '500'), degree: 90};
+    let betasoide: Planet = {x: 0, y: parseFloat(process.env.BETASOIDE_DISTANCE || '2000'), degree: 90};
+    let vulcano: Planet = {x: 0, y: parseFloat(process.env.VULCANO_DISTANCE || '1000'), degree: 90};
     let toSave: IWeatherModel[] = [];
     let weather: string;
     let rainIntensity: number;
 
-    while(day.isBefore(tenYears)) {
-        ferengi = getPlanetPosition(FERENGI_DISTANCE, ferengi.degree + 1);
-        betasoide = getPlanetPosition(BETASOIDE_DISTANCE, betasoide.degree + 3);
-        vulcano = getPlanetPosition(VULCANO_DISTANCE, vulcano.degree + 5);
+    while(day.isBefore(years)) {
+        ferengi = getPlanetPosition(parseFloat(process.env.FERENGI_DISTANCE || '500'), ferengi.degree + 1);
+        betasoide = getPlanetPosition(parseFloat(process.env.BETASOIDE_DISTANCE || '2000'), betasoide.degree + 3);
+        vulcano = getPlanetPosition(parseFloat(process.env.VULCANO_DISTANCE || '1000'), vulcano.degree + 5);
         rainIntensity = 0;
 
         if(arePlanetsAlignedWithSun(ferengi, betasoide, vulcano)) {

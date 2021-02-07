@@ -1,19 +1,19 @@
-const PORT = 8080;
-const DB_HOST = 'localhost';
-const DB_PORT = 27017;
-const DB_NAME = 'galaxy';
-const weatherRouter = require('./routers/weatherRouter');
-const cors = require('cors');
-const express = require('express');
+import dotenv from 'dotenv';
+import cors from 'cors';
+import express from 'express';
+import mongoose from 'mongoose';
+import weatherRouter from './routers/weatherRouter';
+import { initializeDataBase } from './dataAccess/dataBaseInitializer';
+
 const app = express();
-const mongoose = require('mongoose');
-const dataBaseInitializer = require('./dataAccess/dataBaseInitializer');
+
+dotenv.config();
 
 app.use(express.json());
 app.use(cors());
 app.use('/weathers', weatherRouter);
 
-app.listen(PORT, () => console.log(`Server started... listening on port ${PORT}`));
+app.listen(process.env.SERVER_PORT, () => console.log(`Server started... listening on port ${process.env.SERVER_PORT}`));
 
 
 const connectionOptions = {
@@ -22,9 +22,9 @@ const connectionOptions = {
     useCreateIndex: true
 };
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`, connectionOptions)
+mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, connectionOptions)
     .then(() => {
         console.log('Connected to DB');
-        dataBaseInitializer.initializeDataBase();
+        initializeDataBase();
     })
     .catch(error => console.error(error));

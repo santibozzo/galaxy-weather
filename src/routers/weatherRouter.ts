@@ -1,10 +1,9 @@
 import { getWeather, countWeather, topRain } from '../controllers/weatherController';
-
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 router.get('', getWeather);
 router.get('/count', countWeather);
 router.get('/top-rain', topRain);
 
-module.exports = router;
+export default router;
